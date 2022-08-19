@@ -6,7 +6,6 @@ import {AuthService} from "./auth.service";
 @ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController {
-
     constructor(private authService: AuthService) {}
 
     @Post('/login')
