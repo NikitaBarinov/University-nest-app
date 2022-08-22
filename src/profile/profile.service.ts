@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { AddProfileDto } from "src/profile/dto/add-profile.dto";
-import { UsersService } from "src/users/users.service";
+import { User } from "src/users/users.model";
 import { ChangeProfileDto } from "./dto/change-profile.dto";
 import { Profile } from "./profile.model";
 
@@ -11,22 +11,30 @@ export class ProfileService {
     @InjectModel(Profile) private profileRepository: typeof Profile
   ) {}
 
-  async createProfile(dto: AddProfileDto) {
+  async createProfile(dto: AddProfileDto, userId: number) {
+    this.haveAccess(userId, dto.userId);
     const profile = await this.profileRepository.create(dto);
 
     return profile;
   }
 
-  async changeProfileInfo(dto: ChangeProfileDto) {
+  async changeProfileInfo(dto: ChangeProfileDto, userId: number) {
     const profile = await this.profileRepository.findByPk(dto.profileId);
+    this.haveAccess(userId, profile.userId);
     profile.faculty = dto.faculty;
     profile.university = dto.university;
-    if (profile.group && dto.group) {
+    if ((profile.group && dto.group) || (!profile.group && !dto.group)) {
       profile.group = dto.group;
     } else {
-      throw new HttpException("Group is not provided", HttpStatus.NOT_FOUND);
+      throw new HttpException("Invalid group", HttpStatus.NOT_FOUND);
     }
     await profile.save();
     return profile;
+  }
+
+  private haveAccess(userId: number, profileUserId: number) {
+    if(userId != profileUserId) {
+      throw new HttpException("Have not access", HttpStatus.BAD_REQUEST);
+    }
   }
 }

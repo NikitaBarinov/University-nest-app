@@ -1,4 +1,5 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Req, UseGuards} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AddProfileDto } from 'src/profile/dto/add-profile.dto';
 import { ChangeProfileDto } from './dto/change-profile.dto';
 import { ProfileService } from './profile.service';
@@ -7,13 +8,15 @@ import { ProfileService } from './profile.service';
 export class ProfileController {
     constructor(private profileService: ProfileService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('/create')
-    create(@Body() dto: AddProfileDto) {
-        return this.profileService.createProfile(dto);
+    create(@Req() request: any) {
+        return this.profileService.createProfile(request.body, request.user.id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('/update')
-    update(@Body() dto: ChangeProfileDto) {
-        return this.profileService.changeProfileInfo(dto);
+    update(@Req() request: any) {
+        return this.profileService.changeProfileInfo(request.body, request.user.id);
     }
 }
