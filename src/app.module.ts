@@ -14,6 +14,7 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import * as path from "path";
 import { ProfileModule } from "./profile/profile.module";
 import { Profile } from "./profile/profile.model";
+import { GradeModule } from './grade/grade.module';
 
 @Module({
   controllers: [],
@@ -41,6 +42,7 @@ import { Profile } from "./profile/profile.model";
     PostsModule,
     FilesModule,
     ProfileModule,
+    GradeModule,
   ],
 })
 export class AppModule {}
