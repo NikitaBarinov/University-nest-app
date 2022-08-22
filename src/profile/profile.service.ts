@@ -7,15 +7,16 @@ import { Profile } from './profile.model';
 export class ProfileService {
     constructor(@InjectModel(Profile) private profileRepository: typeof Profile) {}
 
-    async createRole(dto: CreateProfileDto) {
-        const role = await this.profileRepository.create(dto);
-        return role;
-    }
-
-    async getProfileByValue(username: string) {
-        
-        const profile = await this.profileRepository.findOne({where: {username}})
-        const user = await this.userRepository.findByPk(dto.userId);
+    async createProfile(dto: CreateProfileDto) {
+        const profile = await this.profileRepository.create(dto);
         return profile;
     }
+
+    // async getProfileByValue(username: string) {
+    //     const profile = await this.profileRepository.findOne({where: {username}})
+
+    //     const user = await this.profileRepository.findByPk(dto.userId);
+
+    //     return profile;
+    // }
 }

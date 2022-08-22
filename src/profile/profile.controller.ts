@@ -8,11 +8,11 @@ export class ProfileController {
 
     @Post()
     create(@Body() dto: CreateProfileDto) {
-        return this.profileService.createRole(dto);
+        return this.profileService.createProfile(dto);
     }
 
-    @Get('/:username')
-    getByUsername(@Param('username') username: string) {
-        return this.profileService.getProfileByValue(username);
-    }
+    // @Get('/:username')
+    // getByUsername(@Param('username') username: string) {
+    //     return this.profileService.getProfileByValue(username);
+    // }
 }

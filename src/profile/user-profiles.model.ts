@@ -1,18 +1,16 @@
 import { Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
-import {User} from "../users/users.model";
-import {Role} from "./roles.model";
+import { Profile } from "./profile.model";
 
-@Table({tableName: 'user_roles', createdAt: false, updatedAt: false})
-export class UserRoles extends Model<UserRoles> {
+@Table({tableName: 'user_profiles', createdAt: false, updatedAt: false})
+export class UserProfiles extends Model<UserProfiles> {
 
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
 
-    @ForeignKey(() => Role)
+    @ForeignKey(() => Profile)
     @Column({type: DataType.INTEGER})
-    roleId: number;
+    profileId: number;
 
-    @ForeignKey(() => User)
     @Column({type: DataType.INTEGER})
     userId: number;
 }

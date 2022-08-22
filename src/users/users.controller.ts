@@ -36,21 +36,12 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @ApiOperation({ summary: "Выдать роль" })
-  @ApiResponse({ status: 200 })
-  @Roles("ADMIN")
-  @UseGuards(RolesGuard)
-  @Post("/role")
-  addRole(@Body() dto: AddRoleDto) {
-    return this.usersService.addRole(dto);
-  }
-
-  @ApiOperation({ summary: "Забанить пользователя" })
-  @ApiResponse({ status: 200 })
-  @Roles("ADMIN")
-  @UseGuards(RolesGuard)
-  @Post("/ban")
-  ban(@Body() dto: BanUserDto) {
-    return this.usersService.ban(dto);
-  }
+  // @ApiOperation({ summary: "Выдать роль" })
+  // @ApiResponse({ status: 200 })
+  // @Roles("ADMIN")
+  // @UseGuards(RolesGuard)
+  // @Post("/role")
+  // addRole(@Body() dto: AddRoleDto) {
+  //   return this.usersService.addRole(dto);
+  // }
 }

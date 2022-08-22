@@ -1,10 +1,13 @@
-import {BelongsToMany, Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
+import {BelongsToMany, Column, DataType, HasMany, Model, Table,} from "sequelize-typescript";
 import {ApiProperty} from "@nestjs/swagger";
 import {Role} from "../roles/roles.model";
 import {UserRoles} from "../roles/user-roles.model";
 import {Post} from "../posts/posts.model";
+import { Type } from "class-transformer";
+import { Profile } from "src/profile/profile.model";
 
 interface UserCreationAttrs {
+    username: string;
     email: string;
     password: string;
 }
@@ -18,7 +21,7 @@ export class User extends Model<User, UserCreationAttrs> {
     @ApiProperty({example: 'podpivas777', description: 'User name'})
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     username: string;
-
+ 
     @ApiProperty({example: 'user@mail.ru', description: 'Почтовый адрес'})
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     email: string;
@@ -28,10 +31,10 @@ export class User extends Model<User, UserCreationAttrs> {
     password: string;
 
     @ApiProperty({example: '89232332345', description: 'Phone number'})
-    @Column({type: DataType.STRING, allowNull: false})
+    @Column({type: DataType.STRING, unique: true, allowNull: false})
     phone: string;
 
-    @ApiProperty({example: '01.01.2000', description: 'Phone number'})
+    @ApiProperty({example: '1999-06-15', description: 'Date of user birthday'})
     @Column({type: DataType.DATE, allowNull: false})
     dateOfBirth: Date;
 
@@ -39,9 +42,9 @@ export class User extends Model<User, UserCreationAttrs> {
     @Column({type: DataType.STRING, allowNull: false})
     sex: string;
 
-    @HasMany(() => Role)
-    profiles: Role[];
+    @HasMany(() => Profile)
+    profiles: Profile[];
 
-    @HasMany(() => Post)
-    posts: Post[];
+    // @HasMany(() => Post)
+    // posts: Post[];
 }
