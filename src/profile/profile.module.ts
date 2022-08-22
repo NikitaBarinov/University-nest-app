@@ -11,11 +11,9 @@ import { Profile } from './profile.model';
   imports: [
     SequelizeModule.forFeature([Profile]),
     forwardRef(() => User)
-
   ],
   exports: [
     ProfileService
   ]
-
 })
 export class ProfileModule {}

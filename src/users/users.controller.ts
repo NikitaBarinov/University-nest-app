@@ -20,6 +20,7 @@ import { BanUserDto } from "./dto/ban-user.dto";
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  //создать пользователя потом создать ему профиль, нужно сделать это через апи
   @ApiOperation({ summary: "Создание пользователя" })
   @ApiResponse({ status: 200, type: User })
   @Post()
@@ -29,7 +30,7 @@ export class UsersController {
 
   @ApiOperation({ summary: "Получить всех пользователей" })
   @ApiResponse({ status: 200, type: [User] })
-  @Roles("ADMIN")
+  // @Roles("ADMIN")
   @UseGuards(RolesGuard)
   @Get()
   getAll() {
