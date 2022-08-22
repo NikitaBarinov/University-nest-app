@@ -13,6 +13,7 @@ interface ProfileCreationAttrs {
   userId: number;
   faculty: string;
   university: string;
+  group?: string;
 }
 
 @Table({ tableName: "profiles" })

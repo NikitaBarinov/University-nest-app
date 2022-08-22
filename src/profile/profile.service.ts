@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { AddProfileDto } from "src/users/dto/add-profile.dto";
+import { AddProfileDto } from "src/profile/dto/add-profile.dto";
 import { UsersService } from "src/users/users.service";
-import { CreateProfileDto } from "./dto/create-profile.dto";
+import { ChangeProfileDto } from "./dto/change-profile.dto";
 import { Profile } from "./profile.model";
 
 @Injectable()
@@ -13,7 +13,17 @@ export class ProfileService {
 
   async createProfile(dto: AddProfileDto) {
     const profile = await this.profileRepository.create(dto);
-    // const user = await this.userService.getUserByEmail();
+
+    return profile;
+  }
+
+  async changeProfileInfo(dto: ChangeProfileDto) {
+    const profile = await this.profileRepository.findByPk(dto.profileId);
+    profile.$set("faculty", dto.faculty)
+    profile.$set("university", dto.university)
+    if(profile.group) {
+        if(dto.group) {}
+    }
     return profile;
   }
 

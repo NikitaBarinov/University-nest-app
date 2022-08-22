@@ -6,7 +6,6 @@ import { RolesService } from "../roles/roles.service";
 import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { ProfileService } from "src/profile/profile.service";
-import { AddProfileDto } from "./dto/add-profile.dto";
 
 @Injectable()
 export class UsersService {
@@ -49,16 +48,16 @@ export class UsersService {
     return user;
   }
 
-  async addProfile(dto: AddProfileDto) {
-    const user = await this.userRepository.findByPk(dto.userId);
-    if (user) {
-      const profile = await this.profileService.createProfile(dto);
-      await user.$add("profile", profile.id);
-      return dto;
-    }
-    throw new HttpException(
-      "Пользователь или роль не найдены",
-      HttpStatus.NOT_FOUND
-    );
-  }
+  // async addProfile(dto: AddProfileDto) {
+  //   const user = await this.userRepository.findByPk(dto.userId);
+  //   if (user) {
+  //     const profile = await this.profileService.createProfile(dto);
+  //     await user.$add("profile", profile.id);
+  //     return dto;
+  //   }
+  //   throw new HttpException(
+  //     "Пользователь или роль не найдены",
+  //     HttpStatus.NOT_FOUND
+  //   );
+  // }
 }
