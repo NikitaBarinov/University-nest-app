@@ -22,6 +22,6 @@ export class ProfileController {
 
     @Get('/profile')
     profile(@Body() body: any) {
-        return this.profileService.getProfileById(body.userId);
+        return this.profileService.getProfileById(body.id);
     }
 }

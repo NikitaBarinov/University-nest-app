@@ -3,6 +3,7 @@ import {plainToClass} from "class-transformer";
 import {validate} from "class-validator";
 import {ValidationException} from "../exceptions/validation.exception";
 
+
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
     async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
@@ -17,5 +18,4 @@ export class ValidationPipe implements PipeTransform<any> {
         }
         return value;
     }
-
 }

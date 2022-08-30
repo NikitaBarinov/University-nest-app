@@ -1,4 +1,4 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GradeService } from './grade.service';
 
@@ -16,5 +16,17 @@ export class GradeController {
     @Post('/update')
     update(@Req() request: any) {
         return this.gradeService.updateGrade(request.body, request.user.id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/averageGradeByStudent')
+    averageGradeByStudent(@Req() request: any) {
+        return this.gradeService.getAverageGradeByStudent(request.body, request.user.id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/averageGradeByFaculty')
+    averageGradeByFaculty(@Req() request: any) {
+        return this.gradeService.getAverageGradeByFaculty(request.body, request.user.id);
     }
 }

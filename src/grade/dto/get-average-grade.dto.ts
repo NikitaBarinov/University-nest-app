@@ -1,12 +1,12 @@
 import {IsNumber, IsString} from "class-validator";
 
-export class AddProfileDto {
+export class GetAverageGradeDto {
     @IsString({message: "Должно быть строкой"})
-    readonly faculty: string;
+    readonly faculty?: string;
     @IsString({message: "Должно быть строкой"})
-    readonly university: string;
-    @IsString({message: "Должно быть строкой"})
-    readonly group?: string;
+    readonly groupId?: string;
     @IsNumber({}, {message: "Должно быть числом"})
-    readonly userId: number;
+    readonly studentId?: number;
+    @IsNumber({}, {message: "Должно быть числом"})
+    readonly teacherId: number;
 }

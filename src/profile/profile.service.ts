@@ -37,10 +37,13 @@ export class ProfileService {
     return profile;
   }
 
-  // async getProfileByUserId(id: number) {
-  //   const profile = await this.profileRepository.findByPk(id);
-  //   return profile;
-  // }
+  async getProfileByFaculty(faculty: string) {
+    const profiles = await this.profileRepository.findAndCountAll({
+      where: {
+        faculty
+    }});
+    return profiles;
+  }
 
   private haveAccess(userId: number, profileUserId: number) {
     if(userId != profileUserId) {
