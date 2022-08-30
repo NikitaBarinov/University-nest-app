@@ -32,9 +32,19 @@ export class ProfileService {
     return profile;
   }
 
+  async getProfileById(id: number) {
+    const profile = await this.profileRepository.findByPk(id);
+    return profile;
+  }
+
+  // async getProfileByUserId(id: number) {
+  //   const profile = await this.profileRepository.findByPk(id);
+  //   return profile;
+  // }
+
   private haveAccess(userId: number, profileUserId: number) {
     if(userId != profileUserId) {
-      throw new HttpException("Have not access", HttpStatus.BAD_REQUEST);
+      throw new HttpException("Have not access", HttpStatus.FORBIDDEN);
     }
   }
 }

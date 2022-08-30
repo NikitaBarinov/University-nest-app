@@ -8,6 +8,7 @@ import {
   } from "sequelize-typescript";
   import { ApiProperty } from "@nestjs/swagger";
   import { User } from "src/users/users.model";
+import { Profile } from "src/profile/profile.model";
   
   interface GradeCreationAttrs {
     studentId: number;
@@ -28,7 +29,7 @@ import {
     id: number;
   
     @ApiProperty({ example: "1", description: "Id of student which got grade" })
-    @ForeignKey(() => User)
+    @ForeignKey(() => Profile)
     @Column({ type: DataType.INTEGER })
     studentId: number;
 
@@ -45,4 +46,3 @@ import {
     @Column({ type: DataType.STRING, allowNull: true })
     lesson: string;
   }
-  

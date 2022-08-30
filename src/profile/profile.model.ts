@@ -45,7 +45,4 @@ export class Profile extends Model<Profile, ProfileCreationAttrs> {
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
   userId: number;
-
-  // @BelongsTo(() => User)
-  // author: User;
 }

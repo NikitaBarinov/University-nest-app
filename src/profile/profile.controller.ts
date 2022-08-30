@@ -19,4 +19,9 @@ export class ProfileController {
     update(@Req() request: any) {
         return this.profileService.changeProfileInfo(request.body, request.user.id);
     }
+
+    @Get('/profile')
+    profile(@Body() body: any) {
+        return this.profileService.getProfileById(body.userId);
+    }
 }
