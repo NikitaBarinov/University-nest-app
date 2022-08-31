@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { AddProfileDto } from "src/profile/dto/add-profile.dto";
-import { User } from "src/users/users.model";
 import { ChangeProfileDto } from "./dto/change-profile.dto";
 import { Profile } from "./profile.model";
 
@@ -23,11 +22,13 @@ export class ProfileService {
     this.haveAccess(userId, profile.userId);
     profile.faculty = dto.faculty;
     profile.university = dto.university;
+
     if ((profile.group && dto.group) || (!profile.group && !dto.group)) {
       profile.group = dto.group;
     } else {
       throw new HttpException("Invalid group", HttpStatus.NOT_FOUND);
     }
+
     await profile.save();
     return profile;
   }
@@ -41,6 +42,16 @@ export class ProfileService {
     const profiles = await this.profileRepository.findAndCountAll({
       where: {
         faculty
+    }});
+    return profiles;
+  }
+
+  async getProfileByGroup(group: string, faculty: string, university: string) {
+    const profiles = await this.profileRepository.findAndCountAll({
+      where: {
+        group,
+        faculty,
+        university
     }});
     return profiles;
   }
