@@ -29,4 +29,22 @@ export class GradeController {
     averageGradeByFaculty(@Req() request: any) {
         return this.gradeService.getAverageGradeByFaculty(request.body, request.user.id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/averageGradeByLesson')
+    averageGradeByLesson(@Req() request: any) {
+        return this.gradeService.getAverageGradeByLesson(request.body, request.user.id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/averageGradeByGroup')
+    averageGradeByGroup(@Req() request: any) {
+        return this.gradeService.getAverageGradeByGroup(request.body, request.user.id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/gradesByProfileAndLesson')
+    gradesByProfileAndLesson(@Req() request: any) {
+        return this.gradeService.getGradesByProfileAndLesson(request.body, request.user.id);
+    }
 }

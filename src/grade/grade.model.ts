@@ -32,12 +32,12 @@ import { Profile } from "src/profile/profile.model";
     @ForeignKey(() => Profile)
     @Column({ type: DataType.INTEGER })
     studentId: number;
-    
+
     @ApiProperty({ example: "1", description: "Id of teacher which create grade" })
     @ForeignKey(() => User)
     @Column({ type: DataType.INTEGER })
     teacherId: number;
-    
+
     @ApiProperty({ example: "5", description: "Assessment of student" })
     @Column({ type: DataType.INTEGER, allowNull: true })
     grade: number;

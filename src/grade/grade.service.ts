@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { Profile } from "src/profile/profile.model";
 import { ProfileService } from "src/profile/profile.service";
 import { createGradeDto } from "./dto/create-grade.dto";
 import { GetAverageGradeDto } from "./dto/get-average-grade.dto";
@@ -53,28 +54,33 @@ export class GradeService {
   }
 
   async getAverageGradeByStudent(dto: GetAverageGradeDto, userId: number) {
-    if (!dto.studentId) {
-      throw new HttpException(
-        "The profile does not belong to a student",
-        HttpStatus.FORBIDDEN
-      );
-    }
     let studentId = dto.studentId;
     const grades: number[] = await this.getGrades(studentId.toString());
     let averageGrade = this.calcAverage(grades);
 
-    const teacherProfile = await this.profileService.getProfileById(
-      dto.teacherId
+    const senderProfile = await this.profileService.getProfileById(
+      dto.senderId
     );
+    if (!dto.studentId || senderProfile.userId !== userId) {
+      throw new HttpException(
+        "Invalid input data",
+        HttpStatus.FORBIDDEN
+      );
+    }
+    
     const studentProfile = await this.profileService.getProfileById(
       dto.studentId
     );
 
-    if (
-      studentProfile.userId !== userId &&
-      studentProfile.university !== teacherProfile.university &&
-      studentProfile.faculty !== teacherProfile.faculty
-    ) {
+    if(!senderProfile.group){
+      if(senderProfile.university !== studentProfile.university || 
+        senderProfile.faculty !== studentProfile.faculty ) {
+          throw new HttpException(
+            "Invalid faculty",
+            HttpStatus.FORBIDDEN
+          );
+        }
+    } else if(senderProfile.userId !== studentProfile.userId) {
       throw new HttpException(
         "The profile does not belong to a student",
         HttpStatus.FORBIDDEN
@@ -96,13 +102,59 @@ export class GradeService {
     );
     let averageGrade = this.calcAverage(grades);
     const teacherProfile = await this.profileService.getProfileById(
-      dto.teacherId
+      dto.senderId
     );
 
     if (
       teacherProfile.userId !== userId &&
       dto.faculty !== teacherProfile.faculty &&
       !teacherProfile.group
+    ) {
+      throw new HttpException(
+        "Invalid dto",
+        HttpStatus.FORBIDDEN
+      );
+    }
+
+    return averageGrade;
+  }
+
+  async getAverageGradeByGroup(dto: GetAverageGradeDto, userId: number) {
+    const teacherProfile = await this.profileService.getProfileById(
+      dto.senderId
+    );
+
+    if (teacherProfile.group || teacherProfile.userId !== userId) {
+      throw new HttpException(
+        "The profile does not belong to a teacher",
+        HttpStatus.FORBIDDEN
+      );
+    }
+
+    const grades: number[] = await this.getGradesByGroup(
+      dto.group.toString(),
+      teacherProfile.faculty.toString(),
+      teacherProfile.university.toString()
+    );
+
+    let averageGrade = this.calcAverage(grades);
+
+    return averageGrade;
+  }
+
+  async getAverageGradeByLesson(dto: GetAverageGradeDto, userId: number) {
+    const grades: number[] = await this.getGradesByLesson(
+      dto.lesson,
+      dto.senderId
+    );
+    let averageGrade = this.calcAverage(grades);
+    const studentProfile = await this.profileService.getProfileById(
+      dto.senderId
+    );
+    if (
+      studentProfile.userId !== userId ||
+      !studentProfile.group ||
+      !dto.lesson
     ) {
       throw new HttpException(
         "The profile does not belong to a student",
@@ -113,12 +165,37 @@ export class GradeService {
     return averageGrade;
   }
 
-  private async getGrades(studentId: string) {
-    const { count, rows } = await this.gradeRepository.findAndCountAll({
+  async getGradesByProfileAndLesson(dto: GetAverageGradeDto, userId: number) {
+    const grades: number[] = await this.getGradesByLesson(
+      dto.lesson,
+      dto.senderId
+    );
+    const studentProfile = await this.profileService.getProfileById(
+      dto.senderId
+    );
+    if (
+      studentProfile.userId !== userId ||
+      !studentProfile.group ||
+      !dto.lesson
+    ) {
+      throw new HttpException(
+        "The profile does not belong to a student",
+        HttpStatus.FORBIDDEN
+      );
+    }
+
+    return grades;
+  }
+
+  //Works with Grade repository
+  private async getGradesByLesson(lesson: string, studentId: number) {
+    const rows = await this.gradeRepository.findAll({
       where: {
-        studentId,
+        lesson: lesson,
+        studentId: studentId,
       },
     });
+
     let grades: number[] = [];
     for (let index = 0; index < rows.length; index++) {
       grades.push(rows[index].getDataValue("grade"));
@@ -127,20 +204,48 @@ export class GradeService {
     return grades;
   }
 
+  private async getGrades(studentId: string) {
+    const rows = await this.gradeRepository.findAll({
+      where: {
+        studentId: studentId,
+      },
+    });
+
+    let grades: number[] = [];
+    for (let index = 0; index < rows.length; index++) {
+      grades.push(rows[index].getDataValue("grade"));
+    }
+
+    return grades;
+  }
+
+  //Works with Profile service
+  private async getGradesByGroup(
+    group: string,
+    faculty: string,
+    university: string
+  ) {
+    const profiles = await this.profileService.getProfileByGroup(
+      group,
+      faculty,
+      university
+    );
+    const grades = await this.getGradesFromProfiles(profiles);
+    return grades;
+  }
+
   private async getGradesByFaculty(faculty: string) {
     const profiles = await this.profileService.getProfileByFaculty(faculty);
+    const grades = await this.getGradesFromProfiles(profiles);
 
+    return grades;
+  }
+
+  private async getGradesFromProfiles(profiles: any) {
     let grades: number[] = [];
     for (let index = 0; index < profiles.rows.length; index++) {
       let studentId = profiles.rows[index].getDataValue("id");
-      let { count, rows } = await this.gradeRepository.findAndCountAll({
-        where: {
-          studentId,
-        },
-      });
-      for (let index = 0; index < rows.length; index++) {
-        grades.push(rows[index].getDataValue("grade"));
-      }
+      grades = grades.concat(await this.getGrades(studentId.toString()));
     }
 
     return grades;
