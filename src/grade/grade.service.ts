@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { Profile } from "src/profile/profile.model";
-import { ProfileService } from "src/profile/profile.service";
+import { ProfileService } from "../profile/profile.service";
 import { createGradeDto } from "./dto/create-grade.dto";
 import { GetAverageGradeDto } from "./dto/get-average-grade.dto";
 import { UpdateGradeDto } from "./dto/update-grade.dto";
@@ -170,9 +169,11 @@ export class GradeService {
       dto.lesson,
       dto.senderId
     );
+
     const studentProfile = await this.profileService.getProfileById(
       dto.senderId
     );
+
     if (
       studentProfile.userId !== userId ||
       !studentProfile.group ||
@@ -205,6 +206,8 @@ export class GradeService {
   }
 
   private async getGrades(studentId: string) {
+
+    
     const rows = await this.gradeRepository.findAll({
       where: {
         studentId: studentId,
