@@ -5,6 +5,7 @@ export class ChangeProfileDto {
     readonly faculty: string;
     @IsString({message: "Должно быть строкой"})
     readonly university: string;
+    @IsString({message: "Должно быть строкой"})
     readonly group?: string;
     @IsNumber({}, {message: "Должно быть числом"})
     readonly profileId: number;

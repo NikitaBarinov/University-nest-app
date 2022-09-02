@@ -7,8 +7,8 @@ import {
     ForeignKey,
   } from "sequelize-typescript";
   import { ApiProperty } from "@nestjs/swagger";
-  import { User } from "src/users/users.model";
-import { Profile } from "src/profile/profile.model";
+  import { User } from "../users/users.model";
+import { Profile } from "../profile/profile.model";
   
   interface GradeCreationAttrs {
     studentId: number;

@@ -32,7 +32,6 @@ export class AuthService {
     const candidateByUsername = await this.userService.getUserByUsername(
       userDto.username
     );
-
     if (candidateByUsername || candidateByPhone || candidateByEmail) {
       throw new HttpException(
         "User with same username or email or phone number exists",
@@ -46,7 +45,7 @@ export class AuthService {
       password: hashPassword,
     });
 
-    return this.generateToken(user);
+    return user;
   }
 
   private async generateToken(user: User) {

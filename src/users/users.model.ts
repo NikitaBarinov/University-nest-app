@@ -1,7 +1,6 @@
-import {BelongsToMany, Column, DataType, HasMany, Model, Table,} from "sequelize-typescript";
+import {Column, DataType, HasMany, Model, Table,} from "sequelize-typescript";
 import {ApiProperty} from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { Profile } from "src/profile/profile.model";
+import { Profile } from "../profile/profile.model";
 
 interface UserCreationAttrs {
     username: string;
