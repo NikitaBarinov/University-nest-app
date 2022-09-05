@@ -206,8 +206,6 @@ export class GradeService {
   }
 
   private async getGrades(studentId: string) {
-
-    
     const rows = await this.gradeRepository.findAll({
       where: {
         studentId: studentId,
