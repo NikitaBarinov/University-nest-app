@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { User } from "./users.model";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { ProfileService } from "../profile/profile.service";
 
 @Injectable()
 export class UsersService {
@@ -23,6 +22,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { email }
     });
+
     return user;
   }
 
