@@ -6,8 +6,7 @@ import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User) private userRepository: typeof User) {}
+  constructor(@InjectModel(User) private userRepository: typeof User) {}
 
   async createUser(dto: CreateUserDto) {
     const user = await this.userRepository.create(dto);
@@ -15,16 +14,13 @@ export class UsersService {
   }
 
   async updateUser(dto: CreateUserDto, userId: number) {
-    console.log("userID", userId);
     const user = await this.userRepository.findByPk(userId);
-    console.log("user",user);
-    
-    if(user){
-      user.username = dto.username;
-      user.password = await bcrypt.hash(dto.password, 5);
-      user.phone = dto.phone;
-      user.dateOfBirth = dto.dateOfBirth;
-      user.sex = dto.sex;
+    if (user) {
+      user.set("username", dto.username);
+      user.set("password", await bcrypt.hash(dto.password, 5));
+      user.set("phone", dto.phone);
+      user.set("dateOfBirth", dto.dateOfBirth);
+      user.set("sex", dto.sex);
       await user.save();
     }
 
@@ -38,7 +34,7 @@ export class UsersService {
 
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOne({
-      where: { email }
+      where: { email },
     });
 
     return user;
@@ -46,14 +42,14 @@ export class UsersService {
 
   async getUserByUsername(username: string) {
     const user = await this.userRepository.findOne({
-      where: { username }
+      where: { username },
     });
     return user;
   }
 
   async getUserByPhone(phone: string) {
     const user = await this.userRepository.findOne({
-      where: { phone }
+      where: { phone },
     });
     return user;
   }

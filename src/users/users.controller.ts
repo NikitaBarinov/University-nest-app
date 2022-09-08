@@ -20,8 +20,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post('/update')
   update(@Req() request: any) {
-    console.log(request.user);
-    
     return this.usersService.updateUser(request.body, request.user.userId);
   }
 

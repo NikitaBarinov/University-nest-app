@@ -16,7 +16,7 @@ let user0 = {
   email: "student01@mail.ru",
   password: "password1",
   phone: "8923000001",
-  dateOfBirth: "1999-06-15",
+  dateOfBirth: "1999-06-16",
   sex: "male",
 };
 
@@ -26,7 +26,7 @@ let user1 = {
   password: "password2",
   phone: "8923000002",
   dateOfBirth: "1999-06-15",
-  sex: "male",
+  sex: "female",
 };
 
 describe("Sequelize (async configuration)", () => {
@@ -153,7 +153,6 @@ describe("Sequelize (async configuration)", () => {
       .send(user0);
 
     let TOKEN = response.body.token;
-    console.log(TOKEN);
 
     return request(server)
       .post("/users/update")
@@ -164,13 +163,11 @@ describe("Sequelize (async configuration)", () => {
       .expect((res) => {
         if (
           res.body.username !== user1.username ||
-          res.body.email !== user1.email ||
-          res.body.password !== user1.password ||
+          res.body.email !== user0.email ||
           res.body.phone !== user1.phone ||
-          res.body.dateOfBirth !== user1.dateOfBirth ||
           res.body.sex !== user1.sex
         ) {
-          throw new Error("User successfully updated");
+          throw new Error("User does not updated");
         }
       });
   });
