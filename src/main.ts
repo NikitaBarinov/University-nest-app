@@ -12,7 +12,6 @@ async function start() {
         .setTitle('Урок по продвинотому BACKEND')
         .setDescription('Документация REST API')
         .setVersion('1.0.0')
-        .addTag('ULBI TV')
         .build()
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/api/docs', app, document)

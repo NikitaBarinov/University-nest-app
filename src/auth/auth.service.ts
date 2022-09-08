@@ -24,8 +24,8 @@ export class AuthService {
 
   async registration(userDto: CreateUserDto) {
     const candidateByEmail = await this.userService.getUserByEmail(
-      userDto.email
-    );
+        userDto.email
+      );
     const candidateByPhone = await this.userService.getUserByPhone(
       userDto.phone
     );
@@ -44,7 +44,7 @@ export class AuthService {
       ...userDto,
       password: hashPassword,
     });
-
+    
     return user;
   }
 

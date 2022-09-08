@@ -25,7 +25,7 @@ export class Profile extends Model<Profile, ProfileCreationAttrs> {
     autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  profileId: number;
 
   @ApiProperty({
     example: "Industrial electronic",
