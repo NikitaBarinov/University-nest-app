@@ -1,4 +1,4 @@
-## Не забудь звезду
+## Backend for universities 
 
 в файле .development.env конфигурация для бд. Добавить свою.
 
