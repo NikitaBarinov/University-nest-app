@@ -35,7 +35,7 @@ export class GradeController {
     averageGradeByLesson(@Req() request: any) {
         return this.gradeService.getAverageGradeByLesson(request.body, request.user.id);
     }
-
+ 
     @UseGuards(JwtAuthGuard)
     @Get('/averageGradeByGroup')
     averageGradeByGroup(@Req() request: any) {
